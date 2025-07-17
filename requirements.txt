@@ -1,0 +1,2 @@
+clickhouse-connect>=0.6.0
+scrapy>=2.5.0 

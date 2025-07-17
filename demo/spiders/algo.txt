@@ -1,0 +1,33 @@
+multithread
+
+
+===THREAD CRAWL FRONTIER URL====
+thread 1
+https://putusan3.mahkamahagung.go.id/direktori <- refresh latest putusan
+
+thread 2
+https://putusan3.mahkamahagung.go.id/direktori/periode/tahunjenis/upload.html <- 2025 kebawah
+
+
+=== Next Algorithm ====
+https://putusan3.mahkamahagung.go.id/direktori/index/tahunjenis/upload/tahun/2024.html
+https://putusan3.mahkamahagung.go.id/direktori/index/tahunjenis/upload/tahun/2023.html
+https://putusan3.mahkamahagung.go.id/direktori/index/tahunjenis/upload/tahun/2022.html
+
+save to {{year}}.json
+putusan
+- 2021.json
+- 2022.json
+- 2023.json
+- 2024.json
+- 2025.json
+
+
+===hash identifier===
+
+hash(no putusan + tingkat proses)
+tingkat_proses
+- pertama
+- banding
+- kasasi
+- peninjauan kembali
