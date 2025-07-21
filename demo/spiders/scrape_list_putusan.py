@@ -1,9 +1,13 @@
+"""
+    The Pagination
+"""
 import scrapy
 from demo.items import PutusanItem
 from demo.utils.hash import cleanHashText
 import re
 import logging
 import json
+import datetime as datetime
 
 class PutusanSpider(scrapy.Spider):
     currentPage = 1
@@ -12,9 +16,10 @@ class PutusanSpider(scrapy.Spider):
     allowed_domains = ["putusan3.mahkamahagung.go.id"]
     custom_settings = {
         'ITEM_PIPELINES': {
-            'demo.pipelines.DemoPipeline': 100,
+            'demo.pipelines.FormattingPipeline': 100,
         }
     }
+    
     start_urls = []
     try:
         with open("crawl_populate.jsonl", "r", encoding="utf-8") as f:
@@ -49,7 +54,6 @@ class PutusanSpider(scrapy.Spider):
         if self.currentPage < self.lastPage:
             self.currentPage += 1
             posts = response.css('#popular-post-list-sidebar .spost')
-            print(posts)
             for post in posts:
                 item = PutusanItem()
                 title_elem = post.css('strong a')
@@ -75,6 +79,7 @@ class PutusanSpider(scrapy.Spider):
                     item['tanggal_putusan'] = lines[0].replace('Tanggal', '').strip()
                     item['pihak'] = lines[1].strip() if len(lines) > 1 else ''
 
-                item['views'] = post.css('i.icon-eye + strong::text').get(default='0')
-                item['downloads'] = post.css('i.icon-download + strong::text').get(default='0')
+                item['view'] = post.css('i.icon-eye + strong::text').get(default='0')
+                item['download'] = post.css('i.icon-download + strong::text').get(default='0')
+                 
                 yield item

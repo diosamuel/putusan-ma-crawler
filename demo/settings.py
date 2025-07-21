@@ -100,16 +100,16 @@ RETRY_TIMES = 3
 RETRY_HTTP_CODES = [500, 502, 503, 504]
 
 EXTENSIONS = {
-    'scrapeops_scrapy.extension.ScrapeOpsMonitor': 500, 
+    # 'scrapeops_scrapy.extension.ScrapeOpsMonitor': 500, 
 }
 
 #Scrapeops
 SCRAPEOPS_PROXY_ENABLED = True
 SCRAPEOPS_API_KEY = 'e2515043-1a68-4771-9aff-2a466faaf9af'
 DOWNLOADER_MIDDLEWARES = {
-    'scrapeops_scrapy.middleware.retry.RetryMiddleware': 550,
-    'scrapy.downloadermiddlewares.retry.RetryMiddleware': None,
-    'scrapeops_scrapy_proxy_sdk.scrapeops_scrapy_proxy_sdk.ScrapeOpsScrapyProxySdk': 725,
+    # 'scrapeops_scrapy.middleware.retry.RetryMiddleware': 550,
+    # 'scrapy.downloadermiddlewares.retry.RetryMiddleware': None,
+    # 'scrapeops_scrapy_proxy_sdk.scrapeops_scrapy_proxy_sdk.ScrapeOpsScrapyProxySdk': 725,
 }
 
 COOKIES_ENABLED = True

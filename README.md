@@ -13,13 +13,13 @@ This project is a scalable web crawler designed to collect and process judicial 
 ## Architecture
 - **Scrapy**: Handles web crawling and data extraction
 - **ClickHouse**: Stores and enables fast querying of crawled data
-- **Airflow**: (Optional) Orchestrates and schedules crawling workflows
+- **Airflow**: Orchestrates and schedules crawling workflows
 
 ## Prerequisites
 - Python 3.7+
 - [Scrapy](https://scrapy.org/)
 - [ClickHouse](https://clickhouse.com/)
-- (Optional) [Apache Airflow](https://airflow.apache.org/)
+- [Apache Airflow](https://airflow.apache.org/)
 
 Install Python dependencies:
 ```bash
@@ -28,6 +28,11 @@ pip install -r requirements.txt
 
 ## Usage
 Run the following commands from the project root to execute the spiders. Output will be saved in JSON Lines format.
+
+- **Activate virtual environtment**
+```bash
+  source venv/bin/activate
+```
 
 - **Populate Crawl Seeds**
   ```bash
@@ -46,23 +51,6 @@ Run the following commands from the project root to execute the spiders. Output 
   scrapy crawl scrape_page -o scrape_page.jsonl -s FEED_OVERWRITE=True
   ```
   _Extracts detailed data from individual decision pages._
-
-## Directory Structure
-```
-├── demo/                  # Main Scrapy project
-│   ├── spiders/           # Scrapy spiders
-│   ├── utils/             # Utility modules
-│   ├── items.py           # Item definitions
-│   ├── pipelines.py       # Data pipelines
-│   └── settings.py        # Scrapy settings
-├── data/                  # Data output and system files
-├── metadata/              # Database schema files
-├── preprocessed_configs/  # Preprocessing configs
-├── store/                 # Storage for crawled data
-├── requirements.txt       # Python dependencies
-├── README.md              # Project documentation
-└── test.py                # Test scripts
-```
 
 ## Contribution
 Contributions are welcome. Please open an issue or submit a pull request for any improvements or bug fixes.

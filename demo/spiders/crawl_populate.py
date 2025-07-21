@@ -6,10 +6,7 @@ import logging
 import json
 
 """
-
-    Massive Crawl Putusan Mahkamah Agung using Depth-First-Search Algorithm
-    Direktori 
-
+    The Crawler
 """
 class PutusanSpider(scrapy.Spider):
     name = "crawl_populate"
@@ -18,7 +15,11 @@ class PutusanSpider(scrapy.Spider):
         "https://putusan3.mahkamahagung.go.id/direktori.html"
     ]
     tree = {}
-
+    custom_settings = {
+        'ITEM_PIPELINES': {
+            'demo.pipelines.FormattingPipeline': 100,
+        }
+    }
     def parse(self, response):
         traverseDirektori = response.xpath('(//*[@aria-labelledby="headingOne"])[1]//a/@href').getall()
         for i, link in enumerate(traverseDirektori):
