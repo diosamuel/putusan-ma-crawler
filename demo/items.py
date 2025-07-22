@@ -18,13 +18,13 @@ class PutusanItem(scrapy.Item):
     register = scrapy.Field()
     putus = scrapy.Field()
     upload = scrapy.Field()
-    nomor_putusan = scrapy.Field()
+    nomor = scrapy.Field()
     tanggal_putusan = scrapy.Field()
     pihak = scrapy.Field()
     view = scrapy.Field()
     download = scrapy.Field()
 
-class DeskripsiPutusanItems(scrapy.Item):
+class DeskripsiPutusanItem(scrapy.Item):
     # Dynamic fields from the table will be added at runtime
     hash_id = scrapy.Field()
     nomor = scrapy.Field()

@@ -93,10 +93,10 @@ ROBOTSTXT_OBEY = True
 
 # Set settings whose default value is deprecated to a future-proof value
 FEED_EXPORT_ENCODING = "utf-8"
-DOWNLOAD_DELAY = random.randrange(6,10)
+DOWNLOAD_DELAY = random.randrange(4,8)
 USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36'
 RETRY_ENABLED = True
-RETRY_TIMES = 3
+RETRY_TIMES = 1
 RETRY_HTTP_CODES = [500, 502, 503, 504]
 
 EXTENSIONS = {
@@ -104,7 +104,7 @@ EXTENSIONS = {
 }
 
 #Scrapeops
-SCRAPEOPS_PROXY_ENABLED = True
+# SCRAPEOPS_PROXY_ENABLED = True
 SCRAPEOPS_API_KEY = 'e2515043-1a68-4771-9aff-2a466faaf9af'
 DOWNLOADER_MIDDLEWARES = {
     # 'scrapeops_scrapy.middleware.retry.RetryMiddleware': 550,

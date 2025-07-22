@@ -1,70 +1,64 @@
 import scrapy
-from demo.items import PutusanItem
-from demo.utils.hash import cleanHashText
 import re
 import logging
 import json
 
-"""
-    The Crawler
-"""
 class PutusanSpider(scrapy.Spider):
     name = "crawl_populate"
     allowed_domains = ["putusan3.mahkamahagung.go.id"]
-    start_urls = [
-        "https://putusan3.mahkamahagung.go.id/direktori.html"
-    ]
+    start_urls = [ "https://putusan3.mahkamahagung.go.id/direktori.html" ]
     tree = {}
-    custom_settings = {
-        'ITEM_PIPELINES': {
-            'demo.pipelines.FormattingPipeline': 100,
-        }
-    }
     def parse(self, response):
         traverseDirektori = response.xpath('(//*[@aria-labelledby="headingOne"])[1]//a/@href').getall()
-        for i, link in enumerate(traverseDirektori):
-            self.tree[link] = {}
-            yield scrapy.Request(
-                link, 
-                callback=self.parseTraverseKlasifikasi,
-                cb_kwargs={'parent_link': link},
-                dont_filter=True
-            )
+        for i, direktori in enumerate(traverseDirektori):
+            if direktori != "https://putusan3.mahkamahagung.go.id/direktori.html":
+                self.tree[direktori] = {}
+                yield scrapy.Request(
+                    direktori, 
+                    callback=self.parseTraverseKlasifikasi,
+                    cb_kwargs={'direktori': direktori},
+                    # dont_filter=True
+                )
 
-    def parseTraverseKlasifikasi(self, response, parent_link):
+    def parseTraverseKlasifikasi(self, response, direktori):
         traverseKlasifikasi = response.xpath('(//*[@aria-labelledby="headingOne"])[2]//a/@href').getall()
-        for level_1 in traverseKlasifikasi:
-            if len(level_1) > 0:
-                self.tree[parent_link][level_1] = {}
-                yield scrapy.Request(level_1, callback=self.parseTraversePengadilan,cb_kwargs={
-                    'parent_link':parent_link,
-                    'level_1':level_1,
+        for klasifikasi in traverseKlasifikasi:
+            if len(klasifikasi) > 0:
+                self.tree[direktori][klasifikasi] = {}
+                yield scrapy.Request(klasifikasi, callback=self.parseTraversePengadilan,cb_kwargs={
+                    'direktori':direktori,
+                    'klasifikasi':klasifikasi,
                 })
     
-    def parseTraversePengadilan(self,response,parent_link,level_1):
+    def parseTraversePengadilan(self,response,direktori,klasifikasi):
         traversePengadilan = response.xpath('(//*[@aria-labelledby="headingOne"])[3]//a/@href').getall()
-        for level_2 in traversePengadilan:
-            if len(level_2) > 0:
-                self.tree[parent_link][level_1][level_2] = {}
-                yield scrapy.Request(level_2, callback=self.findYear,cb_kwargs={
-                    'parent_link':parent_link,
-                    'level_1':level_1,
-                    'level_2':level_2
+        for pengadilan in traversePengadilan:
+            if len(pengadilan) > 0:
+                self.tree[direktori][klasifikasi][pengadilan] = {}
+                yield scrapy.Request(pengadilan, callback=self.findYear,cb_kwargs={
+                    'direktori':direktori,
+                    'klasifikasi':klasifikasi,
+                    'pengadilan':pengadilan
                 })
 
-    def findYear(self,response,parent_link,level_1,level_2):
-        findUpload = response.xpath('(//*[@aria-labelledby="headingOne"])[4]//a/@href').getall()[-1]
+    def findYear(self,response,direktori,klasifikasi,pengadilan):
+        findUpload = response.xpath('(//*[@aria-labelledby="headingOne"])[4]//a/@href').getall()[-1] # get last value
         yield scrapy.Request(findUpload, callback=self.parseTraverseTahun,cb_kwargs={
-            'parent_link':parent_link,
-            'level_1':level_1,
-            'level_2':level_2,
+            'direktori':direktori,
+            'klasifikasi':klasifikasi,
+            'pengadilan':pengadilan,
         })
 
-    def parseTraverseTahun(self,response,parent_link,level_1,level_2):
+    def parseTraverseTahun(self,response,direktori,klasifikasi,pengadilan):
+        print("====================")
         traverseTahun = set(response.xpath('//tbody/tr/td/a/@href').getall())
+        self.tree[direktori][klasifikasi][pengadilan]["upload"] = list(traverseTahun)
+        with open("final_result.jsonl","w") as f:
+            f.write(json.dumps(self.tree))
+        
         yield {
-            "parent_link":parent_link,
-            "level_1":level_1,
-            "level_2":level_2,
-            "final":traverseTahun
+            "direktori":direktori,
+            "klasifikasi":klasifikasi,
+            "pengadilan":pengadilan,
+            "upload":traverseTahun
         }

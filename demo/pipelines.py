@@ -38,9 +38,8 @@ mapperDate = {
 class FormattingPipeline:
     def process_item(self, item, spider):
         adapter = ItemAdapter(item)
-        print(adapter.keys())
-        # adapter["hash_id"] = cleanHashText(adapter["nomor"])
-        # adapter["scraped_at"] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        # adapter["catatan_amar"] = re.sub(r'\s[^a-zA-Z0-9\s-]\s', ' ', adapter["catatan_amar"])
-        
+        adapter["hash_id"] = cleanHashText(adapter["description"]["nomor"] or adapter["nomor"])
+        adapter["scraped_at"] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        adapter["description"]["catatan_amar"] = re.sub(r'\s[^a-zA-Z0-9\s-]\s', ' ', adapter["description"]["catatan_amar"]).lower()
+        adapter["description"][""]
         return item

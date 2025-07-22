@@ -43,7 +43,6 @@ class PutusanSpider(scrapy.Spider):
 
     def parse(self,response):
         logging.debug(response.request.url)
-        data = []
         checktotalPage = response.css('.pagination.justify-content-center a::attr(href)').getall()
         if len(checktotalPage) < 1:
             self.lastPage = 1
@@ -71,7 +70,7 @@ class PutusanSpider(scrapy.Spider):
                 title_text = post.css('strong a::text').get()
                 if title_text:
                     parts = title_text.split("Nomor")
-                    item['nomor_putusan'] = parts[1].strip() if len(parts) > 1 else ''
+                    item['nomor'] = parts[1].strip() if len(parts) > 1 else ''
 
                 info_text = post.css('div > div:nth-child(4)::text').get()
                 if info_text:
