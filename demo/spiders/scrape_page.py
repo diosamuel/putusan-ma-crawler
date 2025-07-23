@@ -6,19 +6,13 @@ import json
 import re
 import logging
 from datetime import datetime
+from demo.utils.etl.db import readData,insertPutusan
 
 class PutusanSpider(scrapy.Spider):
     putusan = {}
     name = "scrape_page"
     allowed_domains = ["putusan3.mahkamahagung.go.id"]
-    start_urls = []
-    try:
-        with open("scrape_list_putusan.jsonl", "r", encoding="utf-8") as f:
-            for line in f:
-                obj = json.loads(line)
-                start_urls.append(obj["link_detail"])
-    except Exception as e:
-        logging.warning(e)
+    start_urls = list(map(lambda x:x[0],readData("link_detail","putusan_data").result_rows))
 
     custom_settings = {
         'ITEM_PIPELINES': {
@@ -58,8 +52,6 @@ class PutusanSpider(scrapy.Spider):
             "description": item,
         }
 
-
-
     def handleRelatedPutusan(self,response):
         laws = list(set(map(lambda res:re.sub(r':','',res.strip()),response.css("ul.portfolio-meta.nobottommargin")[2].css("::text").getall())))
         if len(laws) > 10: #If the length is greater than 10, the HTML element indicates an overflow and needs to be handled differently depending on the case.
@@ -89,7 +81,6 @@ class PutusanSpider(scrapy.Spider):
                         "url":putusan_link[index]
                     }
         else:
-            # for laws
             for index in range(1,len(laws[1:]),2):
                 self.putusan[laws[index]]=laws[index+1]
 

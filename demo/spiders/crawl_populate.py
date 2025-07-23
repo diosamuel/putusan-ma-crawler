@@ -53,7 +53,8 @@ class PutusanSpider(scrapy.Spider):
         print("====================")
         traverseTahun = set(response.xpath('//tbody/tr/td/a/@href').getall())
         self.tree[direktori][klasifikasi][pengadilan]["upload"] = list(traverseTahun)
-        with open("final_result.jsonl","w") as f:
+        
+        with open("crawl_populate.jsonl","w") as f:
             f.write(json.dumps(self.tree))
         
         yield {
