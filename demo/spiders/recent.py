@@ -6,8 +6,12 @@ import logging
 import json
 import datetime as datetime
 from demo.utils.etl.db import insertData
+import random
 
 class Direktori(scrapy.Spider):
+    custom_settings = {
+        'DOWNLOAD_DELAY':0.5
+    }
     stop_crawling = False
     currentPage = 1
     lastPage = 1
@@ -19,7 +23,6 @@ class Direktori(scrapy.Spider):
     ]
 
     def parse(self,response):
-        print("===",response.request.url,"===")
         checktotalPage = response.css('.pagination.justify-content-center a::attr(href)').getall()
         if len(checktotalPage) < 1:
             self.lastPage = 1
@@ -43,7 +46,7 @@ class Direktori(scrapy.Spider):
                         item['upload'] = formmatedDateUpload
                         
                         if item['upload'] and item['upload'] < self.CURRENT_DATE:
-                            # Outdated
+                            # if Outdated
                             self.stop_crawling = True
                             break
 
@@ -65,7 +68,7 @@ class Direktori(scrapy.Spider):
                 item["page"] = self.currentPage
                 item["scraped_at"] = datetime.datetime.now().strftime("%c")
                 try:
-                    insertData(item, 'putusan_data', ['upload', 'link_detail', 'nomor','hash_id','page','scraped_at'])
+                    insertData(item, 'list_putusan', ['upload', 'link_detail', 'nomor','hash_id','page','scraped_at'])
                 except Exception as e:
                     logging.error(f"SQL Error: {str(e)}")
                     raise Exception(f"Failed to insert data into database: {str(e)}")

@@ -14,31 +14,31 @@ Install Python dependencies:
 pip install -r requirements.txt
 ```
 
-## Usage
-Run the following commands from the project root to execute the spiders. Output will be saved in JSON Lines format.
-
 - **Activate virtual environtment**
 ```bash
   source venv/bin/activate
 ```
 
-- **Populate Crawl Seeds**
+- **Generate struktur tree putusan Mahkamah Agung**
   ```bash
   scrapy crawl crawl_populate
   ```
-  _Initializes the crawl with seed URLs or data._
+  Output: crawl_populate.json
 
-- **Scrape List of Decisions**
+- **Crawl link semua putusan berdasarkan struktur Tree**
   ```bash
   scrapy crawl scrape_list_putusan
   ```
-  _Crawls and extracts lists of judicial decisions._
+  Output: table `putusan_data`
 
-- **Scrape Individual Decision Pages**
+  **Monitor & scrape direktori terbaru**
+  ```bash
+  scrapy crawl direktori
+  ```
+  Output: table `putusan_data`
+
+  - **Scrape semua putusan berdasarkan hasil crawl sebelumnya**
   ```bash
   scrapy crawl scrape_page
   ```
-  _Extracts detailed data from individual decision pages._
-
-## Contribution
-Contributions are welcome. Please open an issue or submit a pull request for any improvements or bug fixes.
+  Output: table `putusan`

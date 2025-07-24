@@ -8,11 +8,11 @@ import logging
 from datetime import datetime
 from demo.utils.etl.db import readData,insertPutusan
 
-class PutusanSpider(scrapy.Spider):
+class PageInformationScrape(scrapy.Spider):
     putusan = {}
     name = "scrape_page"
     allowed_domains = ["putusan3.mahkamahagung.go.id"]
-    start_urls = list(map(lambda x:x[0],readData("link_detail","putusan_data").result_rows))
+    start_urls = list(map(lambda x:x[0],readData("link_detail","list_putusan").result_rows))
 
     custom_settings = {
         'ITEM_PIPELINES': {

@@ -1,6 +1,3 @@
-"""
-    The Pagination
-"""
 import scrapy
 from demo.items import PutusanItem
 from demo.utils.hash import cleanHashText
@@ -10,7 +7,7 @@ import json
 import datetime as datetime
 from demo.utils.etl.db import insertData
 
-class PutusanSpider(scrapy.Spider):
+class PutusanPagination(scrapy.Spider):
     currentPage = 1
     lastPage = 1
     name = "scrape_list_putusan"
@@ -39,7 +36,6 @@ class PutusanSpider(scrapy.Spider):
         self.start_urls = list(map(lambda url:url.replace(".html",f"/page/{self.currentPage}.html"),self.start_urls))
 
     def parse(self,response):
-        print(response.request.url)
         checktotalPage = response.css('.pagination.justify-content-center a::attr(href)').getall()
         if len(checktotalPage) < 1:
             self.lastPage = 1
@@ -81,7 +77,7 @@ class PutusanSpider(scrapy.Spider):
                 item["page"] = self.currentPage
                 item["scraped_at"] = datetime.datetime.now().strftime("%c")
                 try:
-                    insertData(item, 'putusan_data', ['upload', 'link_detail', 'nomor','hash_id','page','scraped_at'])
+                    insertData(item, 'list_putusan', ['upload', 'link_detail', 'nomor','hash_id','page','scraped_at'])
                 except Exception as e:
                     logging.error(f"SQL Error: {str(e)}")
                     raise Exception(f"Failed to insert data into database: {str(e)}")

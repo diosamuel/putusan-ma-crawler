@@ -3,7 +3,7 @@ import re
 import logging
 import json
 
-class PutusanSpider(scrapy.Spider):
+class GenerateTree(scrapy.Spider):
     name = "crawl_populate"
     allowed_domains = ["putusan3.mahkamahagung.go.id"]
     start_urls = [ "https://putusan3.mahkamahagung.go.id/direktori.html" ]
@@ -17,7 +17,6 @@ class PutusanSpider(scrapy.Spider):
                     direktori, 
                     callback=self.parseTraverseKlasifikasi,
                     cb_kwargs={'direktori': direktori},
-                    # dont_filter=True
                 )
 
     def parseTraverseKlasifikasi(self, response, direktori):
@@ -50,11 +49,10 @@ class PutusanSpider(scrapy.Spider):
         })
 
     def parseTraverseTahun(self,response,direktori,klasifikasi,pengadilan):
-        print("====================")
         traverseTahun = set(response.xpath('//tbody/tr/td/a/@href').getall())
         self.tree[direktori][klasifikasi][pengadilan]["upload"] = list(traverseTahun)
         
-        with open("crawl_populate.jsonl","w") as f:
+        with open("crawl_populate.json","w") as f:
             f.write(json.dumps(self.tree))
         
         yield {

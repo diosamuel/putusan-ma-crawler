@@ -29,7 +29,6 @@ class DeskripsiPutusanItem(scrapy.Item):
     amar = scrapy.Field()
     amar_lainnya = scrapy.Field()
     catatan_amar = scrapy.Field()
-    tanggal_baca = scrapy.Field()
     kaidah = scrapy.Field()
     abstrak = scrapy.Field()
     putusan = scrapy.Field()

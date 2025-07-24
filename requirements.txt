@@ -1,4 +1,5 @@
 clickhouse-connect
 scrapy
 scrapeops-scrapy
-scrapydweb
+google-generativeai
+beautifulsoup4

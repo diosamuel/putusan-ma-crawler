@@ -26,7 +26,7 @@ class FormattingPipeline:
         desc["tanggal_musyawarah"] = convert_to_ymd(desc["tanggal_musyawarah"])
         desc["hakim_ketua"] = desc["hakim_ketua"].replace("Hakim Ketua","")
         desc["hakim_anggota"] = json.dumps(desc["hakim_anggota"].strip().replace("Hakim Anggota","").split(","))
-        desc["panitera"] = re.sub(r'Panitera Pengganti\s*:?', '', desc["panitera"])
+        desc["panitera"] = re.sub(r'Panitera Pengganti\s*:?', '', desc["panitera"]) if desc["panitera"] else ''
         desc["kaidah"] = re.sub(r'—', '', desc["kaidah"])
         insertPutusan(adapter)
         return dict(adapter)
