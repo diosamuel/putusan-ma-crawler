@@ -3,3 +3,4 @@ scrapy
 scrapeops-scrapy
 google-generativeai
 beautifulsoup4
+boto3

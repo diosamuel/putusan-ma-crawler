@@ -1,7 +1,5 @@
 import google.generativeai as genai
 import json
-
-#A. Import library
 import os
 import json
 import pandas as pd
@@ -11,16 +9,6 @@ import requests
 from bs4 import BeautifulSoup
 import time
 from dotenv import load_dotenv
-load_dotenv()
-
-MODEL_NAME = 'gemini-2.5-flash'
-GOOGLE_API_KEY = os.environ.get('GEMINI_API_KEY')
-model = None
-try:
-    genai.configure(api_key=GOOGLE_API_KEY)
-    model = genai.GenerativeModel(MODEL_NAME)
-except Exception as e:
-    print(e)
 
 
 PROMPT_UNIVERSAL = """
@@ -74,7 +62,9 @@ def ekstrak_data_dengan_gemini(model, teks_pdf):
                 response_mime_type="application/json"
             )
         )
-        return json.loads(response.text)
+        with open("result.json",'w') as file:
+          file.write(json.dumps(json.loads(response.text)))
+          # return json.loads(response.text)
     except Exception as e:
         print(e)
         return None

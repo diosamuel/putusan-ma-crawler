@@ -53,7 +53,7 @@ def extractURL(url):
             
         print("  └─ Mengirim teks ke Gemini untuk ekstraksi...")
         # PERBAIKAN: Meneruskan 'model' ke fungsi ekstraksi
-        hasil_json = ekstrak_data_dengan_gemini(model, full_text)
+        hasil_json = ekstrak_data_dengan_gemini(config.model, full_text)
         
         if hasil_json:
             hasil_json['sumber_url'] = url
@@ -64,3 +64,6 @@ def extractURL(url):
     except Exception as e:
         print(f"  └─ ✗ Terjadi error: {e}")
         return None
+
+
+extractURL("https://putusan3.mahkamahagung.go.id/direktori/putusan/zaf0683df093feda91b9313032363038.html")
