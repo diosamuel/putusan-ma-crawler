@@ -1,7 +1,3 @@
-import boto3
-from botocore.client import Config
-
-# MinIO connection details
 endpoint_url = "http://localhost:9002"  # or wherever your MinIO server runs
 access_key = "root"
 secret_key = "mdmedia123"
@@ -9,24 +5,22 @@ bucket_name = "putusanma"
 object_name = "result/zaf0683df093feda91b9313032363038.pdf"
 pdf_file_path = "report.pdf"  # local path to PDF
 
-# Connect to MinIO using boto3
-s3 = boto3.client(
-    's3',
-    endpoint_url=endpoint_url,
-    aws_access_key_id=access_key,
-    aws_secret_access_key=secret_key,
-    config=Config(signature_version='s3v4'),
-    region_name='us-east-1'
-)
+from minio import Minio
+from dotenv import load_dotenv
 
-# Make sure the bucket exists (create if not)
-try:
-    s3.head_bucket(Bucket=bucket_name)
-except:
-    s3.create_bucket(Bucket=bucket_name)
-
-# Upload the PDF
-with open(pdf_file_path, 'rb') as f:
-    s3.upload_fileobj(f, bucket_name, object_name)
-
-print("✅ PDF uploaded successfully to MinIO!")
+import os
+load_dotenv()
+LOCAL_FILE_PATH = object_name
+ACCESS_KEY = "root"
+SECRET_KEY = "mdmedia123"
+MINIO_API_HOST = "http://localhost:9001"
+MINIO_CLIENT = Minio("localhost:9001", access_key=ACCESS_KEY, secret_key=SECRET_KEY, secure=False)
+def main():
+    found = MINIO_CLIENT.bucket_exists("putusanma")
+    if not found:
+        MINIO_CLIENT.make_bucket("putusanma")
+    else:
+        print("Bucket already exists")
+        MINIO_CLIENT.fput_object("putusanma", object_name,LOCAL_FILE_PATH,)
+    print("It is successfully uploaded to bucket")
+main()
