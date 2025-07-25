@@ -3,10 +3,12 @@ import datetime
 import json
 import logging
 import datetime
+
+
 client = clickhouse_connect.get_client(
-    host="clickhouse",
+    host="localhost", #"clickhouse",
     username="default",
-    password="default",
+    password="default", #"default",
     port=8123
 )
 
@@ -64,6 +66,8 @@ def initTable():
         pdf String,
         tanggal_musyawarah Date,
         tanggal_dibacakan Date
+        update_at String,
+        link_detail String
     ) ENGINE = MergeTree()
     ORDER BY hash_id
     '''

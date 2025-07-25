@@ -1,23 +1,17 @@
-from airflow import DAG
+from airflow.decorators import dag, task
 from airflow.operators.bash import BashOperator
-from datetime import datetime
+from pendulum import datetime
 
-with DAG(
-    dag_id="scrapy_manual_trigger",
-    start_date=datetime(2025, 7, 24),
+@dag(
+    schedule=None,
+    start_date=datetime(2025, 7, 1),
     catchup=False,
-    tags=["scrapy", "manual"],
-) as dag:
-
-    run_scrapy = BashOperator(
-        task_id="run_scrapy_direktori",
-        bash_command="scrapy crawl direktori",
+    tags=["demo", "putusan"],
+)
+def latest_putusan():
+    run_get_latest_putusan = BashOperator(
+        task_id="run_get_latest_putusan",
+        bash_command="python -m demo.api.get-latest-putusan"
     )
 
-
-    webhook = BashOperator(
-        task_id="webhook",
-        bash_command="curl https://webhook.site/f89bf432-9491-4fab-b9be-3e07b1e64d70?params=success+dunia+akhirat"
-    )
-
-    run_scrapy >> webhook
+populate_tree_dag_instance = latest_putusan()

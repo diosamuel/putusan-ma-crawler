@@ -1,14 +1,25 @@
-import google.generativeai as genai
-from dotenv import load_dotenv
+# config.py
+# Berisi semua variabel konfigurasi proyek.
+
 import os
-PDF_DOWNLOAD_FOLDER = "result"
+from dotenv import load_dotenv
+
+# Memuat variabel dari file .env
 load_dotenv()
 
-MODEL_NAME = 'gemini-2.5-flash'
-GOOGLE_API_KEY = "AIzaSyBWPhYzFFo1gRFjyUA4Vh1uskOLi-55hfU"
-model = None
-try:
-    genai.configure(api_key=GOOGLE_API_KEY)
-    model = genai.GenerativeModel(MODEL_NAME)
-except Exception as e:
-    print(e)
+# --- Konfigurasi Gemini ---
+# PERBAIKAN: Menggunakan nama model yang benar (gemini-1.5-flash-latest)
+MODEL_NAME = 'gemini-1.5-flash-latest'
+GOOGLE_API_KEY = os.getenv('GEMINI_API_KEY')
+
+# --- Konfigurasi MinIO ---
+MINIO_ENDPOINT = os.getenv('MINIO_ENDPOINT')
+MINIO_ACCESS_KEY = os.getenv('MINIO_ACCESS_KEY')
+MINIO_SECRET_KEY = os.getenv('MINIO_SECRET_KEY')
+MINIO_BUCKET_NAME = os.getenv('MINIO_BUCKET_NAME')
+
+# --- Konfigurasi Output ---
+PDF_DOWNLOAD_FOLDER = 'downloaded_pdfs'
+OUTPUT_FILENAME_JSON = 'hasil_ekstraksi_putusan.json'
+
+
