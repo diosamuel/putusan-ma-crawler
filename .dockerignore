@@ -1,0 +1,149 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+env/
+.venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Testing and coverage
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# Documentation
+docs/_build/
+/site
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Environment files
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Docker files (exclude other Docker files to avoid confusion)
+-docker-compose.yaml
+-Dockerfile
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.backup
+
+# Data files
+*.jsonl
+*.csv
+*.xlsx
+*.xls
+
+# Scrapy cache
+.scrapy
+
+# Node.js (if any)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Jupyter
+.ipynb_checkpoints
+
+# PyCharm
+.spyderproject
+.spyproject
+.ropeproject
+
+# Type checking
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.pytype/
+
+# Ruff
+.ruff_cache/
+
+# Poetry
+poetry.toml
+.pdm.toml
+__pypackages__/
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# README and documentation (optional - remove if you want them in the image)
+README.md
+*.md
+
+# Images (optional - remove if you need them in the image)
+img/
+
+# Airflow specific (if not needed in the final image)
+airflow/logs/
+airflow/plugins/ 

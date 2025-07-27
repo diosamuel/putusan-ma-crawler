@@ -5,9 +5,7 @@ google-generativeai
 beautifulsoup4
 minio
 python-dotenv
-fitz
-requests
 PyMuPDF
+requests
 pandas
-python-dotenv
 boto3
