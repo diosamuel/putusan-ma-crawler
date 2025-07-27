@@ -1,0 +1,80 @@
+services:
+  # AIRFLOW
+  airflow:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: airflow
+    command: >
+      bash -c "airflow db init &&
+               airflow users create --username admin --firstname Admin --lastname Admin --role Admin --email admin@example.com --password admin &&
+               airflow scheduler & airflow webserver --port 8080"
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=SequentialExecutor
+      - AIRFLOW__CORE__DAGS_FOLDER=/app/airflow/dags
+    volumes:
+      - ./airflow/dags:/app/airflow/dags
+    ports:
+      - "8080:8080"
+    depends_on:
+      - clickhouse
+      - minio
+
+  # API / SCRAPY
+  scrapyapi:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: scrapyapi
+    command: tail -f /dev/null
+    volumes:
+      - .:/app
+    depends_on:
+      - clickhouse
+      - minio
+
+  # CLICKHOUSE DB
+  clickhouse:
+    image: clickhouse/clickhouse-server:23.3
+    container_name: clickhouse
+    ports:
+      - "8123:8123"
+      - "9000:9000"
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    volumes:
+      - clickhouse_data:/var/lib/clickhouse
+
+  # MINIO
+  minio:
+    image: minio/minio
+    container_name: minio
+    command: server /data --console-address ":9091"
+    ports:
+      - "9090:9090"
+      - "9091:9091"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    volumes:
+      - minio_data:/data
+
+  # MINIO CLIENT (optional)
+  mc:
+    image: minio/mc
+    depends_on:
+      - minio
+    entrypoint: >
+      /bin/sh -c "
+      sleep 5;
+      mc alias set local http://minio:9090 minioadmin minioadmin;
+      mc mb local/putusan;
+      mc policy set public local/putusan;
+      exit 0;
+      "
+
+volumes:
+  clickhouse_data:
+  minio_data:
