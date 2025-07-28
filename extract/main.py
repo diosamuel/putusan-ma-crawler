@@ -10,6 +10,8 @@ from datetime import datetime
 from extract.url_process import putusanProcess 
 from crawler.demo.utils.etl.db import insertData
 from crawler.demo.utils.etl.db import readData
+from dotenv import load_dotenv
+load_dotenv()
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
 def setupGeminiModel():
@@ -45,13 +47,6 @@ def main(list_url_putusan):
     s3_client = setupS3MinIO()
     
     list_hasil_akhir = []
-    if os.path.exists(config.OUTPUT_FILENAME_JSON):
-        try:
-            with open(config.OUTPUT_FILENAME_JSON, 'r', encoding='utf-8') as f:
-                list_hasil_akhir = json.load(f)
-        except json.JSONDecodeError:
-            pass
-    
     processed_urls = {item.get('sumber_url') for item in list_hasil_akhir}
     urls_to_process = [url for url in list_url_putusan if url not in processed_urls]
 

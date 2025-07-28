@@ -5,6 +5,8 @@ import logging
 import os
 from bs4 import BeautifulSoup
 from extract.extractor import geminiExtract
+from dotenv import load_dotenv
+load_dotenv()
 def putusanProcess(model, s3_client, url):
     try:
         headers = {'User-Agent': 'Mozilla/5.0'}

@@ -4,6 +4,8 @@ import json
 import logging
 import datetime
 import os
+from dotenv import load_dotenv
+load_dotenv()
 
 client = clickhouse_connect.get_client(
     host=os.getenv("CLICKHOUSE_HOST", "localhost"),
