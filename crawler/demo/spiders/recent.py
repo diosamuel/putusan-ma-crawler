@@ -14,7 +14,7 @@ import random
 
 class Direktori(scrapy.Spider):
     custom_settings = {
-        'DOWNLOAD_DELAY':0.5
+        'DOWNLOAD_DELAY':random.randrange(6,10)
     }
     stop_crawling = False
     currentPage = 1

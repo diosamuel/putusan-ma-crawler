@@ -20,7 +20,8 @@ class PageInformationScrape(scrapy.Spider):
     custom_settings = {
         'ITEM_PIPELINES': {
             'demo.pipelines.FormattingPipeline': 100,
-        }
+        },
+        'DOWNLOAD_DELAY':10
     }
 
     def parse(self, response):

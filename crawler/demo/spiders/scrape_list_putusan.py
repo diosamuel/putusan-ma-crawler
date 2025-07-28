@@ -18,7 +18,9 @@ class PutusanPagination(scrapy.Spider):
     start_urls = []
 
     try:
-        with open("crawl_populate.json",'r') as f:
+        root_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+        crawl_file_path = os.path.join(root_dir, "crawl_populate.json")
+        with open(crawl_file_path,'r') as f:
             data = json.loads(f.read())
             for outer in data:
                 for inner in data[outer]:

@@ -34,7 +34,7 @@ def geminiExtract(model, teks_pdf):
     Menganalisis teks PDF menggunakan model Gemini yang diberikan dan prompt universal.
     """
     if not model:
-        print("  └─ ✗ Model Gemini tidak terkonfigurasi. Ekstraksi dibatalkan.")
+        print("Model Gemini tidak terkonfigurasi. Ekstraksi dibatalkan.")
         return None
         
     try:
@@ -48,5 +48,5 @@ def geminiExtract(model, teks_pdf):
         )
         return json.loads(response.text)
     except Exception as e:
-        print(f"  └─ ✗ Error saat memproses dengan Gemini: {e}")
+        print(f"Error saat memproses dengan Gemini: {e}")
         return None
