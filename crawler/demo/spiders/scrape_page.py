@@ -11,6 +11,10 @@ import logging
 from datetime import datetime
 from demo.utils.etl.db import readData,insertPutusan
 
+"""
+Retrieve link_detail from list_putusan table and scrape each one by one
+Store into informasi_putusan
+"""
 class PageInformationScrape(scrapy.Spider):
     putusan = {}
     name = "scrape_page"

@@ -1,8 +1,6 @@
 import scrapy
 import os
 import sys
-sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
-
 from demo.items import PutusanItem
 from demo.utils.hash import cleanHashText
 import re
@@ -11,7 +9,11 @@ import json
 import datetime as datetime
 from demo.utils.etl.db import insertData
 import random
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
+"""
+Crawl recently putusan MA and store it into list_putusan
+"""
 class Direktori(scrapy.Spider):
     custom_settings = {
         'DOWNLOAD_DELAY':random.randrange(6,10)

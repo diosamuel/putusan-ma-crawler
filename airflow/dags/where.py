@@ -8,10 +8,10 @@ from pendulum import datetime
     catchup=False,
     tags=["demo", "putusan"],
 )
-def where():
-    wheres = BashOperator(
-        task_id="where",
+def check():
+    checks = BashOperator(
+        task_id="check",
         bash_command="cd /opt/airflow/project && echo $(pwd) && echo here"
     )
 
-wheres = where()
+checks = check()

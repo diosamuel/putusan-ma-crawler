@@ -6,7 +6,7 @@ import datetime
 import os
 
 client = clickhouse_connect.get_client(
-    host=os.getenv("CLICKHOUSE_HOST", "clickhouse"),
+    host=os.getenv("CLICKHOUSE_HOST", "localhost"),
     username=os.getenv("CLICKHOUSE_USER", "default"),
     password=os.getenv("CLICKHOUSE_PASSWORD", "default"),
     port=os.getenv("CLICKHOUSE_HTTP_PORT", "8123")
@@ -30,14 +30,10 @@ def insertData(data, table, columns):
 
 def readData(column,table):
     try:
-        retrieve = client.query(f"""
-            SELECT {column} from {table}          
-        """)
-
+        retrieve = client.query(f"SELECT {column} from {table}")
         return retrieve
     except Exception as e:
-        logging.error(f"SQL Error: {str(e)}")
-        raise Exception(f"Failed to retrieve data from database: {str(e)}")
+        logging.error(e)
 
 def initTable():
     informasi_putusan = '''
@@ -104,24 +100,24 @@ def initTable():
     ORDER BY hash_id;
     """
 
-    putusan_pdf = """
-    create table putusan_pdf (
-        hash_id String,
-        nomor String,
-        s3 String,
-        link String,
-        upload_date String
-    ) ENGINE = MergeTree()
-    ORDER BY hash_id;
-    """
+    # putusan_pdf = """
+    # create table putusan_pdf (
+    #     hash_id String,
+    #     nomor String,
+    #     s3 String,
+    #     link String,
+    #     upload_date String
+    # ) ENGINE = MergeTree()
+    # ORDER BY hash_id;
+    # """
     try:
         client.command(informasi_putusan)
         client.command(list_putusan)
         client.command(ekstraksi_pdf)
-        client.command(putusan_pdf)
+        # client.command(putusan_pdf)
         logging.info("Successfully init table")
     except Exception as e:
-        logging.error(f"Error creating table: {e}")
+        logging.error(e)
 
 initTable()
 

@@ -10,6 +10,9 @@ import json
 import datetime as datetime
 from demo.utils.etl.db import insertData
 
+"""
+Crawl tree-generated combination putusan MA (crawl_populate.json) and store it into list_putusan
+"""
 class PutusanPagination(scrapy.Spider):
     currentPage = 1
     lastPage = 1
