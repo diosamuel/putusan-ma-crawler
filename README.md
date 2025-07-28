@@ -23,6 +23,9 @@ This project was both challenging and enjoyable to work on.
 ## How to Run
 
 ```bash
+
+docker network create airflow-net
+
 docker run -d --name airflow \
   --network airflow-net \
   -p 8080:8080 \
@@ -33,7 +36,7 @@ docker run -d --name airflow \
   -e AIRFLOW__CORE__EXECUTOR=SequentialExecutor \
   apache/airflow:3.0.3-python3.10 \
   bash -c "cd /opt/airflow/project && pip install -r requirements.txt && airflow standalone"
-
+  
 docker run -d \
   --network airflow-net \
   --name clickhouse \
@@ -45,10 +48,19 @@ docker run -d \
   clickhouse/clickhouse-server
 
 docker run -d --name minio \
+  --network airflow-net \
   -p 9090:9090 \
   -p 9091:9091 \
   -e "MINIO_ROOT_USER=minioadmin" \
   -e "MINIO_ROOT_PASSWORD=minioadmin" \
   -v "./minio-data:/data" \
   quay.io/minio/minio server /data --console-address ":9091"
+```
+
+Or manual
+```
+cd crawler && scrapy crawl direktori
+cd crawler && scrapy crawl crawl_populate
+cd crawler && scrapy crawl scrape_list_putusan
+cd crawler && scrapy crawl scrape_page
 ```

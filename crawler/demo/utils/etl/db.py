@@ -9,7 +9,7 @@ client = clickhouse_connect.get_client(
     host=os.getenv("CLICKHOUSE_HOST", "clickhouse"),
     username=os.getenv("CLICKHOUSE_USER", "default"),
     password=os.getenv("CLICKHOUSE_PASSWORD", "default"),
-    port=os.getenv("CLICKHOUSE_TCP_PORT", "8123")
+    port=os.getenv("CLICKHOUSE_HTTP_PORT", "8123")
 )
 
 def insertData(data, table, columns):
