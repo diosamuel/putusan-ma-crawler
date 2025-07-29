@@ -31,7 +31,7 @@ def setupS3MinIO():
     try:
         s3_client = boto3.client(
             's3',
-            endpoint_url=f'http://{os.getenv("MINIO_HOST","localhost"):{os.getenv("MINIO_API_PORT","9000")}}',
+            endpoint_url=f'http://{os.getenv("MINIO_HOST","localhost")}:{os.getenv("MINIO_API_PORT","9000")}',
             aws_access_key_id=os.getenv("MINIO_ACCESS_KEY","default"),
             aws_secret_access_key=os.getenv("MINIO_SECRET_KEY","default"),
             config=Config(signature_version='s3v4')
@@ -91,6 +91,6 @@ def main(list_url_putusan):
         logging.warning("No Link to Extract")
 
 
-result = readData('link_detail','informasi_putusan')
+result = readData('pdf','informasi_putusan')
 list_putusan = list(map(lambda x:x[0],result.result_rows))
 main(list_putusan)
