@@ -8,10 +8,10 @@ from pendulum import datetime
     catchup=False,
     tags=["demo", "putusan"],
 )
-def s3Def():
+def url_to_pdf():
     s3_execute = BashOperator(
         task_id="url-to-pdf",
         bash_command="cd /opt/airflow/project && python -m extract.main"
     )
 
-s3_execute = s3Def()
+s3_execute = url_to_pdf()

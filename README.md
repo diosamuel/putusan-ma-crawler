@@ -44,20 +44,20 @@ docker run -d \
   -e CLICKHOUSE_USER=default \
   -e CLICKHOUSE_PASSWORD=default \
   -p 8123:8123 \
-  -p 9000:9000 \
+  -p 5473:5473 \
   clickhouse/clickhouse-server
 
 docker run -d --name minio \
   --network airflow-net \
-  -p 9090:9090 \
-  -p 9091:9091 \
+  -p 9000:9000 \
+  -p 9001:9001 \
   -e "MINIO_ROOT_USER=minioadmin" \
   -e "MINIO_ROOT_PASSWORD=minioadmin" \
   -v "./minio-data:/data" \
-  quay.io/minio/minio server /data --console-address ":9091"
+  quay.io/minio/minio server /data --console-address ":9001"
 ```
 
-Or manual
+Or manual (without orchestration)
 ```
 cd crawler && scrapy crawl direktori
 cd crawler && scrapy crawl crawl_populate

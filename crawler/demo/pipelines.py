@@ -7,13 +7,13 @@
 import re
 import os
 import sys
-sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
-from itemadapter import ItemAdapter
-from demo.utils.hash import cleanHashText
+import json
 from datetime import datetime
+from itemadapter import ItemAdapter
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+from demo.utils.hash import cleanHashText
 from demo.utils.convertDate import convert_to_ymd
 from demo.utils.etl.db import readData,insertPutusan
-import json
 
 class FormattingPipeline:
     def process_item(self, item, spider):

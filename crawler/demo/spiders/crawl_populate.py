@@ -2,7 +2,9 @@ import scrapy
 import re
 import logging
 import json
-
+"""
+Generate big tree combination putusan MA and store it into crawl_populate.json
+"""
 class GenerateTree(scrapy.Spider):
     name = "crawl_populate"
     allowed_domains = ["putusan3.mahkamahagung.go.id"]

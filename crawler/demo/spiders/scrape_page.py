@@ -1,16 +1,20 @@
 import scrapy
 import os
 import sys
-sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
-from demo.items import DeskripsiPutusanItem
-from demo.utils.hash import cleanHashText
 import os
 import json
 import re
 import logging
 from datetime import datetime
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+from demo.items import DeskripsiPutusanItem
+from demo.utils.hash import cleanHashText
 from demo.utils.etl.db import readData,insertPutusan
 
+"""
+Retrieve link_detail from list_putusan table and scrape each one by one
+Store into informasi_putusan
+"""
 class PageInformationScrape(scrapy.Spider):
     putusan = {}
     name = "scrape_page"

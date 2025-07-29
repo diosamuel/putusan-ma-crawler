@@ -1,15 +1,18 @@
 import scrapy
 import os
 import sys
-sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
-from demo.items import PutusanItem
-from demo.utils.hash import cleanHashText
 import re
 import logging
 import json
 import datetime as datetime
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+from demo.items import PutusanItem
+from demo.utils.hash import cleanHashText
 from demo.utils.etl.db import insertData
 
+"""
+Crawl tree-generated combination putusan MA (crawl_populate.json) and store it into list_putusan
+"""
 class PutusanPagination(scrapy.Spider):
     currentPage = 1
     lastPage = 1

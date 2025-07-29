@@ -2,62 +2,51 @@ import os
 import json
 import time
 import google.generativeai as genai
+import sys
+import logging
 import boto3
 from botocore.client import Config
-import extract.config as config
+from datetime import datetime
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 from extract.url_process import putusanProcess 
 from crawler.demo.utils.etl.db import insertData
-from datetime import datetime
-import sys
-sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 from crawler.demo.utils.etl.db import readData
-import logging
-def setup():
-    if config.GOOGLE_API_KEY:
+from dotenv import load_dotenv
+load_dotenv()
+
+def setupGeminiModel():
+    if os.getenv("GEMINI_API_KEY"):
         try:
-            genai.configure(api_key=config.GOOGLE_API_KEY)
-            model = genai.GenerativeModel(config.MODEL_NAME)
+            genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+            model = genai.GenerativeModel(os.getenv("MODEL_NAME"))
             return model
         except Exception as e:
-            logging.error(f"Konfigurasi API gagal: {e}")
+            logging.error(f"Wrong API config {e}")
             return None
     else:
-        logging.error("Kunci API tidak tersedia di config.py atau .env file.")
+        logging.error("Failed to retrieve gemini api key")
         return None
 
-def setupS3():
-    """Mengkonfigurasi dan mengembalikan S3 client untuk MinIO."""
-    print("Menyiapkan koneksi ke MinIO...")
+def setupS3MinIO():
     try:
         s3_client = boto3.client(
             's3',
-            endpoint_url=f'http://{config.MINIO_ENDPOINT}',
-            aws_access_key_id=config.MINIO_ACCESS_KEY,
-            aws_secret_access_key=config.MINIO_SECRET_KEY,
+            endpoint_url=f'http://{os.getenv("MINIO_HOST","localhost")}:{os.getenv("MINIO_API_PORT","9000")}',
+            aws_access_key_id=os.getenv("MINIO_ACCESS_KEY","default"),
+            aws_secret_access_key=os.getenv("MINIO_SECRET_KEY","default"),
             config=Config(signature_version='s3v4')
         )
-        print("Koneksi MinIO berhasil.")
+        logging.info("MinIO Connect Success")
         return s3_client
     except Exception as e:
-        print(f"Koneksi MinIO gagal: {e}")
+        logging.error(f"Failed MinIO connect {e}")
         return None
 
 def main(list_url_putusan):
-    model = setup()
-    s3_client = setupS3()
-    
-    if not model or not s3_client:
-        logging.error("Eksekusi dihentikan karena konfigurasi gagal.")
-        return
+    model = setupGeminiModel()
+    s3_client = setupS3MinIO()
     
     list_hasil_akhir = []
-    if os.path.exists(config.OUTPUT_FILENAME_JSON):
-        try:
-            with open(config.OUTPUT_FILENAME_JSON, 'r', encoding='utf-8') as f:
-                list_hasil_akhir = json.load(f)
-        except json.JSONDecodeError:
-            pass
-    
     processed_urls = {item.get('sumber_url') for item in list_hasil_akhir}
     urls_to_process = [url for url in list_url_putusan if url not in processed_urls]
 
@@ -67,13 +56,11 @@ def main(list_url_putusan):
             if hasil:
                 list_hasil_akhir.append(hasil)
             else:
-                logging.error("Gagal memproses URL ini.\n")
+                logging.error(f"Error: {hasil}")
             if i < len(urls_to_process) - 1:
                 time.sleep(5)
 
     if list_hasil_akhir:
-        logging.info(f"\nMenyimpan total {len(list_hasil_akhir)} data ke dalam file JSON...")
-        logging.info(list_hasil_akhir)
         ekstraksi_columns = [
             'hash_id', 'peran_pihak', 'tempat_lahir', 'tanggal_lahir', 
             'usia', 'jenis_kelamin', 'pekerjaan', 'agama', 
@@ -101,8 +88,9 @@ def main(list_url_putusan):
                     
                     insertData(data, 'ekstraksi_pdf', ekstraksi_columns)
     else:
-        logging.info("Tidak ada data yang berhasil diekstrak.")
+        logging.warning("No Link to Extract")
 
-result = readData('link_detail','informasi_putusan')
+
+result = readData('pdf','informasi_putusan')
 list_putusan = list(map(lambda x:x[0],result.result_rows))
 main(list_putusan)
