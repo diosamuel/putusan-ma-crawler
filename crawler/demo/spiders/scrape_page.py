@@ -1,14 +1,14 @@
 import scrapy
 import os
 import sys
-sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
-from demo.items import DeskripsiPutusanItem
-from demo.utils.hash import cleanHashText
 import os
 import json
 import re
 import logging
 from datetime import datetime
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+from demo.items import DeskripsiPutusanItem
+from demo.utils.hash import cleanHashText
 from demo.utils.etl.db import readData,insertPutusan
 
 """

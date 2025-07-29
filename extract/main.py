@@ -7,12 +7,12 @@ import logging
 import boto3
 from botocore.client import Config
 from datetime import datetime
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 from extract.url_process import putusanProcess 
 from crawler.demo.utils.etl.db import insertData
 from crawler.demo.utils.etl.db import readData
 from dotenv import load_dotenv
 load_dotenv()
-sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
 def setupGeminiModel():
     if os.getenv("GEMINI_API_KEY"):
